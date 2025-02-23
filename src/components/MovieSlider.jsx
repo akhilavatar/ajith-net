@@ -14,12 +14,24 @@ const MovieSlider = ({ category }) => {
 
 	const formattedCategoryName =
 		category.replaceAll("_", " ")[0].toUpperCase() + category.replaceAll("_", " ").slice(1);
-	const formattedContentType = contentType === "movie" ? "Movies" : "TV Shows";
+
+	// Adjusted comparison to handle "movies" as in zustand store
+	const formattedContentType = contentType === "movies" ? "Movies" : "TV Shows"; 
 
 	useEffect(() => {
 		const getContent = async () => {
-			const res = await axios.get(`/api/v1/${contentType}/${category}`);
-			setContent(res.data.content);
+			try {
+				const res = await axios.get(`/api/v1/${contentType}/${category}`);
+				console.log("API Response:", res.data);
+
+				if (res.data.content) {
+					setContent(res.data.content);
+				} else {
+					console.error("Content data not found in the response");
+				}
+			} catch (error) {
+				console.error("Error fetching content:", error);
+			}
 		};
 
 		getContent();
@@ -30,6 +42,7 @@ const MovieSlider = ({ category }) => {
 			sliderRef.current.scrollBy({ left: -sliderRef.current.offsetWidth, behavior: "smooth" });
 		}
 	};
+
 	const scrollRight = () => {
 		sliderRef.current.scrollBy({ left: sliderRef.current.offsetWidth, behavior: "smooth" });
 	};
@@ -83,4 +96,5 @@ const MovieSlider = ({ category }) => {
 		</div>
 	);
 };
+
 export default MovieSlider;

@@ -52,15 +52,18 @@ const HomeScreen = () => {
 							{trendingContent?.title || trendingContent?.name}
 						</h1>
 						<p className='mt-2 text-lg'>
-							{trendingContent?.release_date?.split("-")[0] ||
-								trendingContent?.first_air_date.split("-")[0]}{" "}
+							{trendingContent?.release_date?.split("-")[0] || 
+								(trendingContent?.first_air_date ? trendingContent.first_air_date.split("-")[0] : "Unknown Date")}{" "}
 							| {trendingContent?.adult ? "18+" : "PG-13"}
 						</p>
 
+						{/* Handling of overview with length check */}
 						<p className='mt-4 text-lg'>
-							{trendingContent?.overview.length > 200
-								? trendingContent?.overview.slice(0, 200) + "..."
-								: trendingContent?.overview}
+							{trendingContent?.overview
+								? trendingContent.overview.length > 200
+									? trendingContent.overview.slice(0, 200) + "..."
+									: trendingContent.overview
+								: "No description available"}
 						</p>
 					</div>
 
